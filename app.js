@@ -18,9 +18,10 @@ app.get('/', (req, res) => {
   res.send(`Backend Eduardo Rodando...`);
 })
 
-app.get('/cliente', (req, res) => {
-  connection.query(
-    'select * from cliente',
+app.get('/cliente/:id_cliente', (req, res) => {
+  var id_cliente = req.params("id_cliente")
+  connection.query (
+    'select * from cliente where id_cliente = "$(id_cliente)"',
     (err, results, fields) => {
       if(err) console.log(err)
       res.send(results)
@@ -28,9 +29,52 @@ app.get('/cliente', (req, res) => {
   );
 })
 
+app.get('/cliente/:email', (req, res) => {
+  var email = req.params("email")
+  connection.query (
+    'select * from cliente where email = "$(email))"',
+    (err, results, fields) => {
+      if(err) console.log(err)
+      res.send(results)
+    }
+  );
+})
 
+app.post('/cliente/:id_cliente', (req, res) => {
+  var id_cliente = req.params("id_cliente")
+  connection.query (
+    'select * from cliente where id_cliente = "$(id_cliente)"',
+    (err, results, fields) => {
+      if(err) console.log(err)
+      res.send(results)
+    }
+  );
+})
 
-  // res.send("funcionando")
+app.post('/cliente', (req, res) => {
+  var nome = req.body.nome
+  var sobrenome = req.body.sobrenome
+  var email = req.body.email
+  var data_cadastro  = moment().format("yyyy-mm-dd")
+  var salario = req.body.salario
+  var sql = 'insert into cliente(nome, sobrenome, email, data_cadastro, salario) '+
+  'values("$(nome)", "$(sobrenome)", "$(email)", "$(data_cadastro"), $(salario))'
+    connection.query(sql, (erro, resultado) => {
+      if(erro)  res.send(erro)
+      res.send(resultado)
+    })
+  })
+
+  app.path('/cliente', (req, res) => {
+    var sql = 'update cliente set nome = "JoaoAula", '+
+    'sobrenome = "SilvaAula", email = "outro@outro.com, '+
+    'salario = 2500 where id cliente =56'
+      connection.query(sql, (erro, resultado) => {
+        if(erro)  res.send(erro)
+        res.send(resultado)
+      })
+    })
+  
 
 
 
