@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon",
-    "production": "pm2 start index.js"
+    "production": "pm2 start app.js"
   },
   "repository": {
     "type": "git",
