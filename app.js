@@ -4,6 +4,8 @@ const mysql = require('mysql2');
 const port = 3002
 const moment = require('moment');
 const bodyParser = require('body-parser');
+const formData = require("express-form-data")
+const fs = require("fs")
 
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -59,24 +61,27 @@ app.get('/clientes_email/:email', function(req, res, next) {
   );
 });
 
-app.post('/clientes', function(req, res, next) {
-  var nome = req.body.nome;
-  var sobrenome = req.body.sobrenome;
-  var email = req.body.email;
-  var salario = +req.body.salario;
-  var sql = `insert into cliente(nome, sobrenome,` +
-  `email, data_cadastro, salario) values ("${nome}", "${sobrenome}", ` +
-  `"${email}", "${moment().format("YYYY-MM-DD")}", ${salario})`
-  // if(nome != undefined && sobrenome != undefined && email != undefined && salario != undefined){
-    connection.query(
-      sql, (erro, resultados, fields) => {
-        if(erro)
-          res.send(erro)
-        res.send(resultados)
-      }
-    )
-  // }
-});
+app.post('/clientes',  (req, res) => {
+  var nome = req.body.nome
+  var sobrenome = req.body.sobrenome
+  var email = req.body.email
+  var data_cadastro = moment().format("YYYY-MM-DD")
+  var salario = req.body.salario
+  console.log(req.files)
+  var sql = `insert into cliente(nome, sobrenome, email, `+
+        `data_cadastro,salario) values("${nome}", "${sobrenome}", `+
+        `"${email}", "${data_cadastro}", ${salario})`
+   connection.query(sql, (erro, resultado) =>{
+      if(erro) res.send(erro)
+      var caminhoTemp = req.files.avatar.path
+      var caminhoNovo = `./uploads/clientes/${resultado.insertId}.png`
+      fs.copyFile(caminhoTemp, caminhoNovo, (err) => {
+        console.log(err)
+        res.send(resultado)
+      })
+      
+   })
+})
 
 app.post('/clientes_del/:id_cliente', function(req, res, next) {
   var idCliente = req.params['id_cliente'];
