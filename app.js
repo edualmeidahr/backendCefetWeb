@@ -132,7 +132,7 @@ app.get('/fornecedores', (req, res) => {
   );
 })
 
-app.get('/fornecedores/:id_cliente', (req, res) => {
+app.get('/fornecedores/:id_fornecedor', (req, res) => {
   var id_fornecedor  = req.params.id_fornecedor  
   connection.query(
     `select * from fornecedor where id_fornecedor = ${id_fornecedor }`,
