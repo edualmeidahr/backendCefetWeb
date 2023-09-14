@@ -124,7 +124,7 @@ app.patch('/clientes/:id_cliente', function(req, res, next) {
 //fornecedores
 app.get('/fornecedores', (req, res) => {
   connection.query(
-    'select * from cliente',
+    'select * from fornecedores',
     (err, results, fields) => {
       if(err) console.log(err)
       res.send(results)
